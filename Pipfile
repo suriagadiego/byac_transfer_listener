@@ -12,6 +12,7 @@ mypy = "*"
 django-stubs = "*"
 celery = "*"
 isort = "*"
+gunicorn = "*"
 
 [dev-packages]
 

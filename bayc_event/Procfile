@@ -1,0 +1,1 @@
+web: gunicorn byac_event.wsgi --log-file
