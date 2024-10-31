@@ -51,6 +51,7 @@ def listen_for_events():
     sys.stdout.flush()
     try:
         transfer_filter = contract.events.Transfer().get_logs(from_block="latest")
+        print(f'Found {len(transfer_filter)} Transfer transactions')
         for event in transfer_filter:
             if event.get("event") != "Transfer":
                 raise ValueError("Received event is not a Transfer event.")
