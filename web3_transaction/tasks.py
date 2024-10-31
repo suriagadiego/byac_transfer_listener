@@ -7,13 +7,11 @@ from web3 import Web3
 from .decorators import handle_exceptions
 from .models import BaycTransferEvent
 
+INFURA_URL = f"https://mainnet.infura.io/v3/{settings.INFURA_API_KEY}"
+WEB3 = Web3(Web3.HTTPProvider(INFURA_URL))
 
 @handle_exceptions
-@shared_task
-def listen_for_events():
-    infura_url = f"https://mainnet.infura.io/v3/{settings.INFURA_API_KEY}"
-    web3 = Web3(Web3.HTTPProvider(infura_url))
-
+def get_transfer_by_block(block: str) -> None:
     bayc_contract_address = "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d"
     checksum_address = Web3.to_checksum_address(bayc_contract_address)
     abi = [
@@ -44,34 +42,45 @@ def listen_for_events():
         }
     ]
 
-    contract = web3.eth.contract(address=checksum_address, abi=abi)
+    contract = WEB3.eth.contract(address=checksum_address, abi=abi)
 
     print("Listening for events on BAYC...")
     print("Polling for latest transaction")
     sys.stdout.flush()
-    try:
-        transfer_filter = contract.events.Transfer().get_logs(from_block="latest")
-        print(f'Found {len(transfer_filter)} Transfer transactions')
-        for event in transfer_filter:
-            if event.get("event") != "Transfer":
-                raise ValueError("Received event is not a Transfer event.")
+    
+    transfer_filter = contract.events.Transfer().get_logs(from_block=block)
+    print(f'Found {len(transfer_filter)} Transfer transactions')
+    for event in transfer_filter:
+        if event.get("event") != "Transfer":
+            raise ValueError("Received event is not a Transfer event.")
 
-            from_address = event["args"]["from"]
-            to_address = event["args"]["to"]
-            token_id = event["args"]["tokenId"]
+        from_address = event["args"]["from"]
+        to_address = event["args"]["to"]
+        token_id = event["args"]["tokenId"]
 
-            block_number = event["blockNumber"]
-            transaction_hash = event["transactionHash"]
+        block_number = event["blockNumber"]
+        transaction_hash = event["transactionHash"]
 
-            print(f"Saving transaction hash of {transaction_hash.hex()}")
-            BaycTransferEvent.objects.create(
-                from_address=from_address,
-                to_address=to_address,
-                token_id=token_id,
-                transaction_hash=transaction_hash.hex(),
-                block_number=block_number,
-            )
+        print(f"Saving transaction hash of {transaction_hash.hex()}")
+        BaycTransferEvent.objects.create(
+            from_address=from_address,
+            to_address=to_address,
+            token_id=token_id,
+            transaction_hash=transaction_hash.hex(),
+            block_number=block_number,
+        )
 
-    except Exception as e:
-        print(f"An error occurred while processing events: {e}")
-        sys.stdout.flush()
+
+@shared_task
+def listen_for_events():
+    get_transfer_by_block('latest')
+
+  
+
+@shared_task
+def cleanup_events() -> None:
+    # Fetch the latest block number
+    print('Running cleanup for today')
+    latest_block = WEB3.eth.block_number
+
+    get_transfer_by_block(latest_block - 50)
