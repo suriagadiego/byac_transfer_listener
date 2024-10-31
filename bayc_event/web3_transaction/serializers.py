@@ -5,11 +5,11 @@ from .models import BaycTransferEvent
 
 class BaycTransferSerializer(serializers.ModelSerializer):
     tx_link = serializers.SerializerMethodField()
-
+    
     def get_tx_link(self, obj):
         # Check if obj is a dictionary and extract transaction_hash
         if isinstance(obj, dict):
-            transaction_hash = obj.get("transaction_hash")
+            transaction_hash = obj.get('transaction_hash')
         else:
             transaction_hash = obj.transaction_hash
 
