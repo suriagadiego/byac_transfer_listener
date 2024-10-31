@@ -149,13 +149,18 @@ To get the transfer history for a specific Contract address:
 GET http://127.0.0.1:8000/web3_transaction/contract_address/<str:contract_address>/
 ```
 
-### Simplifications made:
-- Currently this is deployed in this endpoint 
+## Highlights
+- The application is polling the latest blocks on the Ethereum blockchain using **Celery**, **Celery Beat**, and **Redis**. 
+- It polls for new transfer events every 30 seconds using Celery Beat to ensure timely updates.
+- Additionally, a cron job is scheduled on Celery Beat to run every 24 hours at 4 PM UTC, performing a cleanup of large blocks to ensure that no events are missed during the regular polling.
+
+
+## Simplifications made
+- Currently this is deployed in this domain 
 ```http
 https://byactransferlistener-production.up.railway.app/web3_transaction/bayc/transfers/
 ```
 - Unfortunately due to timeconstraints the celery workers are not yet deployed. Will also deploy the celery workers in the future if needed
-
 
 # Author
 [Diego Suriaga] - [GitHub Profile](https://github.com/suriagadiego)
