@@ -30,7 +30,6 @@ pillow-heif==0.16.0
 pip-chill==1.0.3
 pipreqs==0.5.0
 psycopg2-binary==2.9.9
-pycairo==1.26.0
 pyrsistent==0.20.0
 redis==5.2.0
 ruff==0.7.1
