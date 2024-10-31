@@ -12,9 +12,9 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
-    "polling-task-every-10-seconds": {
+    "polling-task-every-30-seconds": {
         "task": "web3_transaction.tasks.listen_for_events",
-        "schedule": timedelta(seconds=20),
+        "schedule": timedelta(seconds=30),
     },
     "polling-task-every-4pm-utc": {
         "task": "web3_transaction.tasks.catchup_events",

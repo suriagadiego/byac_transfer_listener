@@ -48,7 +48,7 @@ def get_transfer_by_block(block: str) -> None:
     print("Polling for latest transaction")
     sys.stdout.flush()
     
-    transfer_filter = contract.events.Transfer().get_logs(from_block=block)
+    transfer_filter = contract.events.Transfer().get_logs(from_block=block) # type: ignore
     print(f'Found {len(transfer_filter)} Transfer transactions')
     for event in transfer_filter:
         if event.get("event") != "Transfer":
@@ -78,9 +78,9 @@ def listen_for_events():
   
 
 @shared_task
-def cleanup_events() -> None:
+def catchup_events() -> None:
     # Fetch the latest block number
     print('Running cleanup for today')
     latest_block = WEB3.eth.block_number
 
-    get_transfer_by_block(latest_block - 50)
+    get_transfer_by_block(latest_block - 6500)
