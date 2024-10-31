@@ -23,7 +23,7 @@ The BAYC NFT Transfer Event Listener is a Django application that connects to th
 - brew
 - redis
 
-### Steps to Install
+### Steps to Install & Running the Event Listener
 1. Clone the repository:
    ```bash
    git clone https://github.com/suriagadiego/byac_transfer_listener.git
@@ -149,6 +149,13 @@ To get the transfer history for a specific Contract address:
 GET http://127.0.0.1:8000/web3_transaction/contract_address/<str:contract_address>/
 ```
 
+### Simplifications made:
+- Currently this is deployed in this endpoint 
+```http
+https://byactransferlistener-production.up.railway.app/web3_transaction/bayc/transfers/
+```
+- Unfortunately due to timeconstraints the celery workers are not yet deployed. Will also deploy the celery workers in the future if needed
 
-## Author
+
+# Author
 [Diego Suriaga] - [GitHub Profile](https://github.com/suriagadiego)
