@@ -1,6 +1,3 @@
-# byac_transfer_listener
-byac transfer listener
-
 # BAYC NFT Transfer Event Listener
 
 ## Description
