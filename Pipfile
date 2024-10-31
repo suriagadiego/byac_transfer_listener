@@ -13,6 +13,7 @@ django-stubs = "*"
 celery = "*"
 isort = "*"
 gunicorn = "*"
+redis = "*"
 
 [dev-packages]
 
