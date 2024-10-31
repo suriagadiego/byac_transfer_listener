@@ -20,5 +20,5 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("web3_transaction/", include('web3_transaction.urls')),
+    path("web3_transaction/", include("web3_transaction.urls")),
 ]
