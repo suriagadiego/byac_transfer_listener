@@ -41,7 +41,12 @@ The BAYC NFT Transfer Event Listener is a Django application that connects to th
     brew install redis
     ```
 
-4. Run the celery Workers and the project:
+4. Create an env file on the root of the project
+   ```bash
+   INFURA_API_KEY=sample_api_key1
+   ```
+
+5. Run the celery Workers and the project:
     ```bash
     celery -A bayc_event worker -E -l info
     ```
