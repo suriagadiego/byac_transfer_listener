@@ -111,7 +111,7 @@ GET http://127.0.0.1:8000/web3_transaction/bayc/transfers/?token_id=123
 
 To get the transfer history without specifying a token ID:
 ```http
-GET http://127.0.0.1:8000/web3_transaction/bayc/transfers/
+GET http://127.0.0.1:8000/web3_transaction/contract_address/<str:contract_address>/
 ```
 
 ### Get Transfer History of a certain contract address
